@@ -31,4 +31,43 @@
  */
 export function sabziMandiBill(shoppingList, priceList) {
   // Your code here
+  const sabziAvailable = Object.keys(priceList);
+  // for (const sabzi of shoppingList) {
+  //   let item = {};
+  //   if (sabziAvailable.includes(sabzi.name) && priceList[sabzi.name] <= 80) {
+  //     item = {
+  //       name: sabzi.name,
+  //       qty: sabzi.qty,
+  //       cost: priceList[sabzi.name] * sabzi.qty,
+  //     };
+  //     results.items.push(item);
+  //     results.totalBill += item.cost;
+  //   }
+  // }
+  const results = shoppingList.reduce(
+    (taila, sabzi) => {
+      if (sabziAvailable.includes(sabzi.name) && priceList[sabzi.name] <= 80) {
+        const item = {
+          name: sabzi.name,
+          qty: sabzi.qty,
+          cost: priceList[sabzi.name] * sabzi.qty,
+        };
+        taila.items.push(item);
+        taila.totalBill += item.cost;
+      }
+      return taila;
+    },
+    { items: [], totalBill: 0 },
+  );
+  return results;
 }
+
+const res = sabziMandiBill(
+  [
+    { name: 'aloo', qty: 2 },
+    { name: 'shimla mirch', qty: 1 },
+  ],
+  { aloo: 30, tamatar: 40, shimla_mirch: 90 },
+);
+
+console.log(res);

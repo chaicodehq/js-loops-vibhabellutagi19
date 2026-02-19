@@ -15,10 +15,10 @@
  *   - No trailing spaces on any row
  *
  * Pattern for n=3:
- *     *
- *   * *
- *   * * *
- *   * *
+ *     * -> 1
+ *    * * -> 2
+ *   * * * -> 3
+ *    * * -> 2n - i -> 2*3 = 6 - 4
  *     *
  *
  * (Each row is a string in the returned array)
@@ -37,4 +37,20 @@
  */
 export function rangoli(n) {
   // Your code here
+  let returnString = [];
+
+  if (!Number.isInteger(n) || n <= 0) {
+    return returnString;
+  }
+
+  for (let i = 1; i <= 2 * n - 1; i++) {
+    let k = i <= n ? i : 2 * n - i;
+    let leading = ' '.repeat(n - k);
+    let stars = Array(k).fill('*').join(' ');
+    returnString.push(leading + stars);
+  }
+
+  return returnString;
 }
+
+console.log(rangoli(3));

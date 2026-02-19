@@ -38,4 +38,64 @@
  */
 export function iplPointsTable(matches) {
   // Your code here
+
+  if (!Array.isArray(matches)) {
+    return [];
+  }
+
+  const scoreTable = matches.reduce(
+    (matchTable, { team1, team2, winner, result }) => {
+      matchTable[team1] ??= {
+        played: 0,
+        won: 0,
+        lost: 0,
+        tied: 0,
+        noResult: 0,
+        points: 0,
+      };
+      matchTable[team2] ??= {
+        played: 0,
+        won: 0,
+        lost: 0,
+        tied: 0,
+        noResult: 0,
+        points: 0,
+      };
+
+      matchTable[team1].played++;
+      matchTable[team2].played++;
+
+      if (result == 'tie') {
+        matchTable[team1].tied++;
+        matchTable[team2].tied++;
+
+        matchTable[team1].points++;
+        matchTable[team2].points++;
+      } else if (result == 'no_result') {
+        matchTable[team1].noResult++;
+        matchTable[team2].noResult++;
+
+        matchTable[team1].points++;
+        matchTable[team2].points++;
+      } else if (winner) {
+        const loser = winner === team1 ? team2 : team1;
+        matchTable[winner].won++;
+        matchTable[winner].points += 2;
+        matchTable[loser].lost++;
+      }
+
+      return matchTable;
+    },
+    {},
+  );
+
+  return Object.entries(scoreTable)
+    .sort((a, b) => {
+      if (a[1].points != b[1].points) {
+        return b[1].points - a[1].points;
+      } else {
+        return a[0].localeCompare(b[0]);
+      }
+    })
+    .map(([team, stats]) => ({ team, ...stats }));
 }
